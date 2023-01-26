@@ -226,17 +226,40 @@ function clear_cell(cell) {
 }
 
 function cell_value(cell) {
-    return cell.innerText;
+    if (cell.childNodes.length == 3) {
+        const [topClue, rule, bottomClue] = Array.from(cell.childNodes);
+        return topClue.textContent + " | " + bottomClue.textContent;
+    } else {
+        return cell.innerText;
+    }
 }
 
 function set_cell_value(cell, val) {
-    cell.innerText = val;
+    if (val.length > 1) {
+        const clues = val.split("|").map(c => c.trim());
+        if (clues.length > 2) {
+            alert("Max två ledtrådar per cell");
+            return;
+        }
+
+        if (clues.length == 1)
+            cell.innerText = clues[0];
+        else if (clues.length == 2) {
+            const [topClue, bottomClue] = clues;
+            cell.innerHTML = topClue + "<hr />" + bottomClue;
+        }
+    } else {
+        cell.innerText = val;
+    }
     cell.classList.toggle("blocked", val.length > 1);
 }
 
 function edit_cell_clue(cell) {
     let val = cell_value(cell);
-    let result = window.prompt("Skriv en ledtråd (avbryt för att ta bort ledtråden)", val);
+    let result = window.prompt(`
+Skriv en ledtråd (avbryt för att ta bort ledtråden).
+
+Använd '|' för att skapa en delad ledtråd.`, val);
     if (result && result.length > 1) {
         set_cell_value(cell, result);
     } else {
@@ -629,7 +652,7 @@ function export_crossword() {
 }
 
 function export_cell(cell) {
-    return cell.innerText;
+    return cell_value(cell);
 }
 
 function import_crossword(raw_crossword) {

@@ -130,6 +130,12 @@ select::-ms-expand {
     vertical-align: middle;
     text-align: center;
     position: relative;
+    background-clip: padding-box;
+}
+
+#crossword-table hr {
+    border-width: 1px 1px 0 1px;
+    margin: 2px -1px;
 }
 
 #crossword-table td.right-turn::after {
@@ -165,7 +171,7 @@ select::-ms-expand {
 #wordlist-container {
     flex: 1;
     min-width: 40%;
-}  
+}
 
 #wordlist-filter {
     text-transform: uppercase;
